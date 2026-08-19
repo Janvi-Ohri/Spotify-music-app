@@ -30,6 +30,14 @@ class Playlist:
     def add_song(self, song):
         self.songs.append(song)
 
+        # Save song details in text file
+        with open("spotify_data.txt", "a", encoding="utf-8") as file:
+            file.write("Title: " + song.title + "\n")
+            file.write("Artist: " + song.artist + "\n")
+            file.write("Genre: " + song.genre + "\n")
+            file.write("Duration: " + str(song.duration) + "\n")
+            file.write("-----------------------------\n")
+
     def show_playlist(self):
         print("Playlist Name:", self.name)
 
@@ -47,7 +55,9 @@ song4 = Song("Boyfriend", "Karan Aujla", "Romantic", 4)
 
 songs = [song1, song2, song3, song4]
 
-playlist = Playlist("My Playlist", songs)
+# Empty playlist
+playlist = Playlist("My Playlist", [])
+
 
 # Main Menu
 while True:
@@ -91,6 +101,7 @@ while True:
                 print("\nNow Playing 🎵")
                 print(song.title, "-", song.artist)
                 found = True
+                break
 
         if found == False:
             print("Song not found.")
@@ -101,9 +112,16 @@ while True:
 
         for song in songs:
             if search.lower() == song.title.lower():
-                playlist.add_song(song)
-                print("Song added to playlist.")
                 found = True
+
+                if song in playlist.songs:
+                    print("Song is already in the playlist.")
+                else:
+                    playlist.add_song(song)
+                    print("Song added to playlist.")
+                    print("Song details saved in spotify_data.txt")
+
+                break
 
         if found == False:
             print("Song not found.")
